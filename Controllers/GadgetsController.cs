@@ -29,5 +29,22 @@ namespace BondGadgetCollection.Controllers
 
             return View("Details", gadget);
         }
+
+        //Retorna um formulário de criação
+        public ActionResult Create()
+        {
+            return View("GadgetForm");
+        }
+
+        //Cria um item no banco
+        public ActionResult ProcessCreate(GadgetModel gadgetModel)
+        {
+            //Salvando no banco de dados
+            GadgetDAO gadgetDAO = new GadgetDAO();
+
+            gadgetDAO.Create(gadgetModel);
+
+            return View("Details", gadgetModel);
+        }
     }
 }

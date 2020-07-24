@@ -84,5 +84,37 @@ namespace BondGadgetCollection.Data
             }
             
         }
+
+        // Create
+        public int Create(GadgetModel gadgetModel)
+        {
+
+            // Acesso ao banco de dados
+            // Using abra e fecha automaticamente o banco de dados
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                string sqlQuery = "INSERT INTO dbo.Gadgets Values(@Name, @Description, @AppearsIn, @WithThisActor)";
+
+                // associar @id com o parâmetro Id
+
+                SqlCommand command = new SqlCommand(sqlQuery, connection);
+
+                command.Parameters.Add("@Name", System.Data.SqlDbType.VarChar, 1000).Value = gadgetModel.Name;
+                command.Parameters.Add("@Description", System.Data.SqlDbType.VarChar, 1000).Value = gadgetModel.Description;
+                command.Parameters.Add("@AppearsIn", System.Data.SqlDbType.VarChar, 1000).Value = gadgetModel.AppearsIn;
+                command.Parameters.Add("@WithThisActor", System.Data.SqlDbType.VarChar, 1000).Value = gadgetModel.WithThisActor;
+
+                connection.Open();
+
+                int newID = command.ExecuteNonQuery();
+  
+                return newID;
+            }
+
+        }
+        // Delete
+        // Update
+        // Search for name
+        // Search for description
     }
 }
