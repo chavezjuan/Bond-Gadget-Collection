@@ -36,13 +36,30 @@ namespace BondGadgetCollection.Controllers
             return View("GadgetForm");
         }
 
+        public ActionResult Edit(int id)
+        {
+            GadgetDAO gadgetDAO = new GadgetDAO();
+            GadgetModel gadget = gadgetDAO.FetchOne(id);
+            return View("GadgetForm", gadget);
+        }
+
+        public ActionResult Delete(int id)
+        {
+            GadgetDAO gadgetDAO = new GadgetDAO();
+            gadgetDAO.Delete(id);
+
+            List<GadgetModel> gadgets = gadgetDAO.FetchAll();
+
+            return View("Index", gadgets);
+        }
+
         //Cria um item no banco
         public ActionResult ProcessCreate(GadgetModel gadgetModel)
         {
             //Salvando no banco de dados
             GadgetDAO gadgetDAO = new GadgetDAO();
 
-            gadgetDAO.Create(gadgetModel);
+            gadgetDAO.CreateOrUpdate(gadgetModel);
 
             return View("Details", gadgetModel);
         }

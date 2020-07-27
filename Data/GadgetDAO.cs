@@ -1,4 +1,5 @@
 ﻿using BondGadgetCollection.Models;
+using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 
@@ -45,6 +46,23 @@ namespace BondGadgetCollection.Data
             return returnList;
         }
 
+        internal int Delete(int id)
+        {
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                string sqlQuery = "DELETE FROM dbo.Gadgets WHERE Id = @Id ";
+
+                SqlCommand command = new SqlCommand(sqlQuery, connection);
+
+                command.Parameters.Add("@Id", System.Data.SqlDbType.VarChar, 1000).Value = id;
+                
+                connection.Open();
+
+                int deletedID = command.ExecuteNonQuery();
+
+                return deletedID;
+            }
+        }
 
         public GadgetModel FetchOne(int Id)
         {
@@ -86,19 +104,30 @@ namespace BondGadgetCollection.Data
         }
 
         // Create
-        public int Create(GadgetModel gadgetModel)
+        public int CreateOrUpdate(GadgetModel gadgetModel)
         {
 
             // Acesso ao banco de dados
             // Using abra e fecha automaticamente o banco de dados
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
-                string sqlQuery = "INSERT INTO dbo.Gadgets Values(@Name, @Description, @AppearsIn, @WithThisActor)";
+                string sqlQuery = "";
+
+                if(gadgetModel.Id <= 0)
+                {
+                    sqlQuery = "INSERT INTO dbo.Gadgets Values(@Name, @Description, @AppearsIn, @WithThisActor)";
+                }
+                else
+                {
+                    //update
+                    sqlQuery = "UPDATE dbo.Gadgets SET Name = @Name, Description = @Description, AppearsIn = @AppearsIn, WithThisActor = @WithThisActor WHERE Id = @Id";
+                }
 
                 // associar @id com o parâmetro Id
 
                 SqlCommand command = new SqlCommand(sqlQuery, connection);
 
+                command.Parameters.Add("@Id", System.Data.SqlDbType.VarChar, 1000).Value = gadgetModel.Id;
                 command.Parameters.Add("@Name", System.Data.SqlDbType.VarChar, 1000).Value = gadgetModel.Name;
                 command.Parameters.Add("@Description", System.Data.SqlDbType.VarChar, 1000).Value = gadgetModel.Description;
                 command.Parameters.Add("@AppearsIn", System.Data.SqlDbType.VarChar, 1000).Value = gadgetModel.AppearsIn;

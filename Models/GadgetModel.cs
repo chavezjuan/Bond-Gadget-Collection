@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
 
@@ -8,9 +10,18 @@ namespace BondGadgetCollection.Models
     public class GadgetModel
     {
         public int Id { get; set; }
+
+        [Required]
         public string Name { get; set; }
+
+        [Required]
         public string Description { get; set; }
+
+        [Required]
+        [DisplayName ("Appears in this movie")]
         public string AppearsIn { get; set; }
+        
+        [Required]
         public string WithThisActor { get; set; }
 
         //Criação do construtor da classe quando não for passado nenhum

@@ -47,6 +47,8 @@
                 @Html.ValidationMessageFor(model => model.WithThisActor, "", new { @class = "text-danger" })
             </div>
         </div>
+        @*A partir desse input, saberemos se estamos lidando com um item já existente ou um novo*@
+        <input type="hidden" name="Id" value="@Model.Id" />
 
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
