@@ -64,6 +64,41 @@ namespace BondGadgetCollection.Data
             }
         }
 
+        internal List<GadgetModel> SearchForName(string searchPhrase)
+        {
+            List<GadgetModel> returnList = new List<GadgetModel>();
+
+            // Acesso ao banco de dados
+            // Using abra e fecha automaticamente o banco de dados
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                string sqlQuery = "SELECT * from dbo.Gadgets WHERE NAME LIKE @searchForMe";
+
+                SqlCommand command = new SqlCommand(sqlQuery, connection);
+                command.Parameters.Add("@searchForMe", System.Data.SqlDbType.NVarChar).Value = "%" + searchPhrase + "%";
+
+                connection.Open();
+                SqlDataReader reader = command.ExecuteReader();
+
+                if (reader.HasRows)
+                {
+                    while (reader.Read())
+                    {
+                        //Criando um novo objeto Gadget e adicionando na lista de retorno.
+                        GadgetModel gadget = new GadgetModel();
+                        gadget.Id = reader.GetInt32(0);
+                        gadget.Name = reader.GetString(1);
+                        gadget.Description = reader.GetString(2);
+                        gadget.AppearsIn = reader.GetString(3);
+                        gadget.WithThisActor = reader.GetString(4);
+
+                        returnList.Add(gadget);
+                    }
+                }
+                return returnList;
+            }
+        }
+
         public GadgetModel FetchOne(int Id)
         {
 

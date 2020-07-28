@@ -63,5 +63,19 @@ namespace BondGadgetCollection.Controllers
 
             return View("Details", gadgetModel);
         }
+
+        public ActionResult SearchForm()
+        {
+            return View("SearchForm");
+        }
+
+        public ActionResult SearchForName(string searchPhrase)
+        {
+            GadgetDAO gadgetDAO = new GadgetDAO();
+            List<GadgetModel> searchResults = gadgetDAO.SearchForName(searchPhrase);
+
+
+            return View("Index", searchResults);
+        }
     }
 }
